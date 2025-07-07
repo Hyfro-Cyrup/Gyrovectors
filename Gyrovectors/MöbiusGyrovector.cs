@@ -98,6 +98,9 @@ public readonly struct MöbiusGyrovector : IGyroVector<MöbiusGyrovector, double
 
     }
 
+    public static MöbiusGyrovector operator *(double scalar, MöbiusGyrovector vector)
+        => vector * scalar;
+
     public static MöbiusGyrovector operator /(MöbiusGyrovector left, double right)
         => new MöbiusGyrovector(left._value * (1 / right));
     #endregion
