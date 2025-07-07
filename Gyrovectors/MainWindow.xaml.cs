@@ -83,7 +83,7 @@ public partial class MainWindow : Window
         double radius = (new Complex(center_x - a.x, center_y - a.y)).Magnitude;
 
         // draw the arc
-        double angle_offset = Math.Acos(1 / radius);
+        double angle_offset = Math.Acos(1 / (new Complex(center_x, center_y).Magnitude));
         double center_angle = Math.Atan2(center_y, center_x);
 
         DrawArc(Math.Cos(center_angle + angle_offset), Math.Sin(center_angle + angle_offset), Math.Cos(center_angle - angle_offset), Math.Sin(center_angle - angle_offset), radius);
