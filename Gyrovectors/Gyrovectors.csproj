@@ -8,4 +8,14 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Gyrovectorspace.cs" />
+    <Compile Remove="Vector.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="IGyrovector" />
+    <None Remove="NewFile1.txt" />
+  </ItemGroup>
+
 </Project>
