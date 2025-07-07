@@ -25,7 +25,19 @@ public readonly struct MöbiusGyrovector : IGyroVector<MöbiusGyrovector, double
 
     public static MöbiusGyrovector Gyr(MöbiusGyrovector a, MöbiusGyrovector b, MöbiusGyrovector c)
         => new MöbiusGyrovector(((a + b)._value / (b + a)._value) * c._value);
-    
+
+    public static double InnerProduct(MöbiusGyrovector a, MöbiusGyrovector b)
+        => a.x * b.x + a.y * b.y;
+
+    public static double NormSquared(MöbiusGyrovector a)
+        => InnerProduct(a, a);
+
+    public static double Norm(MöbiusGyrovector a)
+        => Math.Sqrt(NormSquared(a));
+
+    public static double Distance(MöbiusGyrovector a, MöbiusGyrovector b)
+        => Norm(-a + b);
+
     #region Equality
 
     public bool Equals(MöbiusGyrovector? other)
@@ -75,10 +87,11 @@ public readonly struct MöbiusGyrovector : IGyroVector<MöbiusGyrovector, double
 
     public static MöbiusGyrovector operator *(MöbiusGyrovector vector, double scalar)
     {
-        Complex a = Complex.Pow(1 + vector._value, scalar);
-        Complex b = Complex.Pow(1 - vector._value, scalar);
         double mag = vector._value.Magnitude;
-        if (mag == 0) { mag = 1; }
+        if (mag == 0) { return Zero; }
+
+        Complex a = Math.Pow(1 + mag, scalar);
+        Complex b = Math.Pow(1 - mag, scalar);
         return new MöbiusGyrovector((a - b) / (a + b) * vector._value / mag);
 
     }
@@ -87,5 +100,8 @@ public readonly struct MöbiusGyrovector : IGyroVector<MöbiusGyrovector, double
         => new MöbiusGyrovector(left._value * (1 / right));
     #endregion
 
-
+    public override string ToString()
+    {
+        return _value.ToString();
+    }
 }
