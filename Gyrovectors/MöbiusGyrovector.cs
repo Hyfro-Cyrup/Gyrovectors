@@ -17,6 +17,8 @@ public readonly struct MöbiusGyrovector : IGyroVector<MöbiusGyrovector, double
         _value = value;
     }
 
+    public MöbiusGyrovector(double x, double y) : this(new Complex(x, y)) { }
+
     public static MöbiusGyrovector Zero = new(0);
     public static MöbiusGyrovector AdditiveIdentity => Zero;
 

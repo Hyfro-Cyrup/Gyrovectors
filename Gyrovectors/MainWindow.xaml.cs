@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Numerics;
 using System.Text;
@@ -23,19 +24,29 @@ public partial class MainWindow : Window
     public static (double, double) Center = (200, 200);
     public static double Scale = 150;
     public static double LineWeight = 2;
+    private static double PanSpeed = 0.02;
+    private static List<(MöbiusGyrovector, MöbiusGyrovector)> Lines = new();
 
     public MainWindow()
     {
         InitializeComponent();
-        DrawCircle(0, 0, 1);
+        this.KeyDown += OnKeyDown;
 
-        MöbiusGyrovector a = new (new(-0.5, 0.1));
-        MöbiusGyrovector b = new(new(0.5, 0.1));
-        SketchLine(a, b);
-        DrawLine(a, b);
+        double side_length = Math.Sqrt(2) * Math.Sin(Math.PI / 12) / Math.Sin(3 * Math.PI / 4);
+
+        for (int i = 0; i < 6; i++)
+        {
+            MöbiusGyrovector a = new(side_length * Math.Cos(Math.PI * i / 3), side_length * Math.Sin(Math.PI * i / 3));
+            MöbiusGyrovector b = new(side_length * Math.Cos(Math.PI * (i+1) / 3), side_length * Math.Sin(Math.PI * (i+1) / 3));
+            Lines.Add((a, b));
+        }
+
+        Redraw();
     }
+
+    #region Draw Tools
     public void DrawCircle(double x, double y, double radius)
-        => DrawCircle(x, y, radius, Brushes.Black);
+    => DrawCircle(x, y, radius, Brushes.Black);
 
     public void DrawCircle(double x, double y, double radius, Brush color)
     {
@@ -127,6 +138,49 @@ public partial class MainWindow : Window
 
 
     }
+    #endregion
 
-    
+    private void OnKeyDown(object sender, KeyEventArgs e)
+    {
+        MöbiusGyrovector translation = new MöbiusGyrovector(0, 0);
+
+        switch (e.Key)
+        {
+            case Key.Up:
+                translation = new MöbiusGyrovector(0, PanSpeed);
+                break;
+            case Key.Down:
+                translation = new MöbiusGyrovector(0, -PanSpeed);
+                break;
+            case Key.Left:
+                translation = new MöbiusGyrovector(-PanSpeed, 0);
+                break;
+            case Key.Right:
+                translation = new MöbiusGyrovector(PanSpeed, 0);
+                break;
+        }
+
+        Translate(translation);
+        Redraw();
+    }
+
+    private void Translate(MöbiusGyrovector ds)
+    {
+        for (int i = 0; i < Lines.Count; i++)
+        {
+            Lines[i] = (ds + Lines[i].Item1, ds + Lines[i].Item2);
+        }
+    }
+
+    private void Redraw()
+    {
+        MyCanvas.Children.Clear();
+        DrawCircle(0, 0, 1);
+        foreach (var line in Lines)
+        {
+            DrawLine(line.Item1, line.Item2);
+        }
+    }
+
+
 }
