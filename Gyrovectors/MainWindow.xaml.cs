@@ -32,6 +32,7 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
         this.KeyDown += OnKeyDown;
+        this.SizeChanged += OnSizeChanged;
 
         double side_length = Math.Sqrt(2) * Math.Sin(Math.PI / 12) / Math.Sin(3 * Math.PI / 4);
 
@@ -193,6 +194,7 @@ public partial class MainWindow : Window
     }
     #endregion
 
+    #region Handlers
     private void OnKeyDown(object sender, KeyEventArgs e)
     {
         MöbiusGyrovector translation = new MöbiusGyrovector(0, 0);
@@ -213,9 +215,23 @@ public partial class MainWindow : Window
                 break;
         }
 
+
         Translate(translation);
         Redraw();
     }
+
+    private void OnSizeChanged(object sender, SizeChangedEventArgs e)
+    {
+        double width = MyCanvas.ActualWidth;
+        double height = MyCanvas.ActualHeight;
+
+        Center = (width / 2, height / 2);
+        Scale = Math.Min(width, height) * 0.4;
+
+        Redraw();
+    }
+
+    #endregion
 
     private void Translate(MöbiusGyrovector ds)
     {
