@@ -9,16 +9,22 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Gyrovectors
+namespace Gyrovectors;
+
+/// <summary>
+/// Interaction logic for MainWindow.xaml
+/// </summary>
+public partial class MainWindow : Window
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window
+    public MainWindow()
     {
-        public MainWindow()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
+        Canvas lmc = MyCanvas;
+        Ellipse lEll = new Ellipse();
+        lEll.Width = 100;
+        lEll.Height = 100;
+        lEll.Fill = new SolidColorBrush(Color.FromRgb(0, 200, 0));
+        lmc.Children.Add(lEll);
     }
+
 }
