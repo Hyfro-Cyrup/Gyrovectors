@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Drawing;
 using System.Numerics;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -40,6 +41,58 @@ public partial class MainWindow : Window
             MöbiusGyrovector b = new(side_length * Math.Cos(Math.PI * (i+1) / 3), side_length * Math.Sin(Math.PI * (i+1) / 3));
             Lines.Add((a, b));
         }
+
+        List<(MöbiusGyrovector, MöbiusGyrovector)> Tier_One_Perps = new();
+        
+        // add tier 1 perpindiculars
+        for (int i = 0; i < 6; i++)
+        {
+            var (a, b) = Lines[i];
+
+            foreach (var (start, end) in new[] { (a, b), (b, a) }) // Both directions
+            {
+                MöbiusGyrovector prev = end; // the preceeding vector in the line gets rotated to become the perpindicular
+                for (int step = 2; step < 4; step++) // create two points in this direction
+                {
+                    var point = start + step * (-start + end);
+
+                    var perp = MöbiusGyrovector.RotateAround(prev, point, Math.PI/2);
+
+                    Tier_One_Perps.Add((point, perp));
+                    prev = point;
+                }
+            }
+
+        }
+
+        // add tier 2 perpindiculars
+        List<(MöbiusGyrovector, MöbiusGyrovector)> Tier_Two_Perps = new();
+        foreach (var (a, b) in Tier_One_Perps)
+        {
+            MöbiusGyrovector prev = a; 
+            for (int step = 1; step < 3; step++) 
+            {
+                var point = a + step * (-a + b);
+
+                var perp = MöbiusGyrovector.RotateAround(prev, point, Math.PI / 2);
+
+                Tier_Two_Perps.Add((point, perp));
+                prev = point;
+            }
+            prev = a;
+            for (int step = -1; step > -3; step--)
+            {
+                var point = a + step * (-a + b);
+
+                var perp = MöbiusGyrovector.RotateAround(prev, point, Math.PI / 2);
+
+                Tier_Two_Perps.Add((point, perp));
+                prev = point;
+            }
+        }
+
+        Lines.AddRange(Tier_One_Perps);
+        Lines.AddRange(Tier_Two_Perps);
 
         Redraw();
     }
@@ -147,16 +200,16 @@ public partial class MainWindow : Window
         switch (e.Key)
         {
             case Key.Up:
-                translation = new MöbiusGyrovector(0, PanSpeed);
-                break;
-            case Key.Down:
                 translation = new MöbiusGyrovector(0, -PanSpeed);
                 break;
+            case Key.Down:
+                translation = new MöbiusGyrovector(0, PanSpeed);
+                break;
             case Key.Left:
-                translation = new MöbiusGyrovector(-PanSpeed, 0);
+                translation = new MöbiusGyrovector(PanSpeed, 0);
                 break;
             case Key.Right:
-                translation = new MöbiusGyrovector(PanSpeed, 0);
+                translation = new MöbiusGyrovector(-PanSpeed, 0);
                 break;
         }
 

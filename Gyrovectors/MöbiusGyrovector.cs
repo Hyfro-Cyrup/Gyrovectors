@@ -40,6 +40,13 @@ public readonly struct MöbiusGyrovector : IGyroVector<MöbiusGyrovector, double
     public static double Distance(MöbiusGyrovector a, MöbiusGyrovector b)
         => Norm(-a + b);
 
+    // angle in radians
+    public static MöbiusGyrovector Rotate(MöbiusGyrovector a, double angle)
+        => new MöbiusGyrovector(a._value * Complex.Exp(Complex.ImaginaryOne * angle));
+
+    public static MöbiusGyrovector RotateAround(MöbiusGyrovector a, MöbiusGyrovector center, double angle)
+        => center + Rotate(-center + a, angle);
+
     #region Equality
 
     public bool Equals(MöbiusGyrovector? other)
