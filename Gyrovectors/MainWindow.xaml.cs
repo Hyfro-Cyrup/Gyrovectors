@@ -150,9 +150,9 @@ public partial class MainWindow : Window
 
     public void DrawLine(MöbiusGyrovector a, MöbiusGyrovector b)
     {
-        double A = (MöbiusGyrovector.NormSquared(a) - MöbiusGyrovector.NormSquared(b)) / (2 * (a.x - b.x));
+        double A = (MöbiusGyrovector.ENormSquared(a) - MöbiusGyrovector.ENormSquared(b)) / (2 * (a.x - b.x));
         double B = (b.y - a.y) / (a.x - b.x);
-        double center_y = (MöbiusGyrovector.NormSquared(a) - 2 * A * a.x + 1) / (2 * (B * a.x + a.y));
+        double center_y = (MöbiusGyrovector.ENormSquared(a) - 2 * A * a.x + 1) / (2 * (B * a.x + a.y));
         double center_x = A + B * center_y;
 
         double radius = (new Complex(center_x - a.x, center_y - a.y)).Magnitude;

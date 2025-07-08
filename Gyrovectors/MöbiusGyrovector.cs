@@ -28,17 +28,9 @@ public readonly struct MöbiusGyrovector : IGyroVector<MöbiusGyrovector, double
     public static MöbiusGyrovector Gyr(MöbiusGyrovector a, MöbiusGyrovector b, MöbiusGyrovector c)
         => new MöbiusGyrovector(((a + b)._value / (b + a)._value) * c._value);
 
-    public static double InnerProduct(MöbiusGyrovector a, MöbiusGyrovector b)
-        => a.x * b.x + a.y * b.y;
-
-    public static double NormSquared(MöbiusGyrovector a)
-        => InnerProduct(a, a);
-
-    public static double Norm(MöbiusGyrovector a)
-        => Math.Sqrt(NormSquared(a));
-
-    public static double Distance(MöbiusGyrovector a, MöbiusGyrovector b)
-        => Norm(-a + b);
+    // This is very sadly not related to any norm in hyperbolic geometry
+    public static double ComplexNormSquared(MöbiusGyrovector a)
+        => a.x*a.x + a.y*a.y;
 
     // angle in radians
     public static MöbiusGyrovector Rotate(MöbiusGyrovector a, double angle)
