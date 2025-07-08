@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Gyrovectors;
 
-public class MöbiusGyroline
+public readonly struct MöbiusGyroline
 {
     public readonly MöbiusGyrovector a, b;
     public readonly Complex center;

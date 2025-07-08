@@ -1,14 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Media3D;
 
 namespace Gyrovectors;
 
 public readonly struct MöbiusGyrovector : IGyroVector<MöbiusGyrovector, double>
 {
+    public const double S = 1; // Gyrovectors live in the S-ball of the complex plane
+    private static readonly double UNIT_LENGTH = Math.Tanh(1.0 / 2.0); // Used in the Norm formula; asserts that MöbiusGyrovector(UNIT_LENGTH, 0) has norm 1. Would be const if Math.Tanh was a constexpr
+
     readonly Complex _value;
 
     public MöbiusGyrovector(Complex value)
@@ -19,7 +24,7 @@ public readonly struct MöbiusGyrovector : IGyroVector<MöbiusGyrovector, double
 
     public MöbiusGyrovector(double x, double y) : this(new Complex(x, y)) { }
 
-    public static MöbiusGyrovector Zero = new(0);
+    public static readonly MöbiusGyrovector Zero = new(0);
     public static MöbiusGyrovector AdditiveIdentity => Zero;
 
     public double x => _value.Real;
@@ -29,8 +34,26 @@ public readonly struct MöbiusGyrovector : IGyroVector<MöbiusGyrovector, double
         => new MöbiusGyrovector(((a + b)._value / (b + a)._value) * c._value);
 
     // This is very sadly not related to any norm in hyperbolic geometry
-    public static double ComplexNormSquared(MöbiusGyrovector a)
-        => a.x*a.x + a.y*a.y;
+    public static double EInnerProduct(MöbiusGyrovector a, MöbiusGyrovector b)
+        => a.x * b.x + a.y * b.y;
+    public static double ENormSquared(MöbiusGyrovector a)
+        => EInnerProduct(a, a);
+
+    public static double Norm(MöbiusGyrovector a)
+        => Math.Atanh(a._value.Magnitude / S) / Math.Atanh(UNIT_LENGTH / S);
+
+    public static double Distance(MöbiusGyrovector a, MöbiusGyrovector b)
+        => Norm(-a + b);
+
+    public static MöbiusGyrovector NearestPointOnLine(MöbiusGyrovector point, MöbiusGyroline line)
+    {
+        if (S != 1) { throw new NotImplementedException("Distance from point to line relies on assumptions about standard Poincare Disk"); }
+
+        // Get the intersection between segment point--center and the circle (center, radius)
+        Complex delta = point._value - line.center;
+        return new MöbiusGyrovector(line.center + line.radius * delta / delta.Magnitude);
+
+    }
 
     // angle in radians
     public static MöbiusGyrovector Rotate(MöbiusGyrovector a, double angle)
@@ -76,9 +99,23 @@ public readonly struct MöbiusGyrovector : IGyroVector<MöbiusGyrovector, double
 
     #region Operators
 
-    public static MöbiusGyrovector operator +(MöbiusGyrovector left, MöbiusGyrovector right) 
-        => new MöbiusGyrovector((left._value + right._value) / (1 + Complex.Conjugate(left._value) * right._value));
-
+    public static MöbiusGyrovector operator +(MöbiusGyrovector u, MöbiusGyrovector v)
+    {
+        if (S == 1)
+        {
+            // In the normal S=1 Poincare Disk we can use a simpler formula. Tested & proven equal to the below
+            return new MöbiusGyrovector((u._value + v._value) / (1 + Complex.Conjugate(u._value) * v._value));
+        }
+        // This is the general formula that works in the S-ball of any inner product space. 
+        double uv = MöbiusGyrovector.EInnerProduct(u, v);
+        double u2 = MöbiusGyrovector.ENormSquared(u);
+        double v2 = MöbiusGyrovector.ENormSquared(v);
+        const double S2 = S * S;
+        const double S4 = S2 * S2;
+        return new MöbiusGyrovector(
+            ((1 + (2.0 / S2) * uv + (1.0 / S2) * v2) * u._value + (1 - (1.0 / S2) * u2) * v._value) /
+            (1 + (2.0 / S2) * uv + (1.0 / S4) * u2 * v2));
+    }
 
     public static MöbiusGyrovector operator -(MöbiusGyrovector value) 
         => new MöbiusGyrovector(-value._value);
@@ -86,15 +123,23 @@ public readonly struct MöbiusGyrovector : IGyroVector<MöbiusGyrovector, double
     public static MöbiusGyrovector operator -(MöbiusGyrovector left, MöbiusGyrovector right)
         => left + (-right);
 
+    public static MöbiusGyrovector CoAddition(MöbiusGyrovector a, MöbiusGyrovector b)
+        => a + Gyr(a, -b, b);
+
+    public static MöbiusGyrovector CoSubtraction(MöbiusGyrovector a, MöbiusGyrovector b)
+        => CoAddition(a, -b);
+
+    public MöbiusGyrovector BoxPlus(MöbiusGyrovector other)
+        => CoAddition(this, other);
+
+    public MöbiusGyrovector BoxMinus(MöbiusGyrovector other)
+        => CoSubtraction(this, other);
+
     public static MöbiusGyrovector operator *(MöbiusGyrovector vector, double scalar)
     {
         double mag = vector._value.Magnitude;
         if (mag == 0) { return Zero; }
-
-        Complex a = Math.Pow(1 + mag, scalar);
-        Complex b = Math.Pow(1 - mag, scalar);
-        return new MöbiusGyrovector((a - b) / (a + b) * vector._value / mag);
-
+        return new MöbiusGyrovector(S * Math.Tanh(scalar * Math.Atanh(mag / S)) * vector._value / mag);
     }
 
     public static MöbiusGyrovector operator *(double scalar, MöbiusGyrovector vector)

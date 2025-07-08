@@ -32,7 +32,8 @@ public partial class MainWindow : Window
     public static double Scale = 150;
     public static double LineWeight = 2;
     private static double PanSpeed = 0.02;
-    private static List<(MöbiusGyrovector, MöbiusGyrovector)> Lines = new();
+    private static List<MöbiusGyroline> Lines = new();
+    private static MöbiusGyrovector min_point = MöbiusGyrovector.Zero, opposite_point = MöbiusGyrovector.Zero;
 
     public MainWindow()
     {
@@ -48,7 +49,7 @@ public partial class MainWindow : Window
         {
             MöbiusGyrovector a = new(side_length * Math.Cos(Math.PI * i / 3), side_length * Math.Sin(Math.PI * i / 3));
             MöbiusGyrovector b = new(side_length * Math.Cos(Math.PI * (i+1) / 3), side_length * Math.Sin(Math.PI * (i+1) / 3));
-            Lines.Add((a, b));
+            Lines.Add(new(a, b));
         }
 
         List<GraphSegment> Tier_One_Perps = new();
@@ -56,9 +57,9 @@ public partial class MainWindow : Window
         // add tier 1 perpindiculars
         for (int i = 0; i < 6; i++)
         {
-            var (a, b) = Lines[i];
+            var line = Lines[i];
 
-            foreach (var (start, end) in new[] { (a, b), (b, a) }) // Both directions
+            foreach (var (start, end) in new[] { (line.a, line.b), (line.b, line.a) }) // Both directions
             {
                 MöbiusGyrovector prev = end; // the preceeding vector in the line gets rotated to become the perpindicular
                 for (int step = 2; step < max_depth + 2; step++) // create two points in this direction
@@ -102,8 +103,8 @@ public partial class MainWindow : Window
             }
         }
 
-        Lines.AddRange(from seg in Tier_One_Perps select (seg.start, seg.stop));
-        Lines.AddRange(from seg in Tier_Two_Perps select (seg.start, seg.stop));
+        Lines.AddRange(from seg in Tier_One_Perps select new MöbiusGyroline(seg.start, seg.stop));
+        Lines.AddRange(from seg in Tier_Two_Perps select new MöbiusGyroline(seg.start, seg.stop));
 
         Redraw();
     }
@@ -149,20 +150,14 @@ public partial class MainWindow : Window
     }
 
     public void DrawLine(MöbiusGyrovector a, MöbiusGyrovector b)
+    => DrawLine(new MöbiusGyroline(a, b));
+
+    public void DrawLine(MöbiusGyroline line)
     {
-        double A = (MöbiusGyrovector.ENormSquared(a) - MöbiusGyrovector.ENormSquared(b)) / (2 * (a.x - b.x));
-        double B = (b.y - a.y) / (a.x - b.x);
-        double center_y = (MöbiusGyrovector.ENormSquared(a) - 2 * A * a.x + 1) / (2 * (B * a.x + a.y));
-        double center_x = A + B * center_y;
+        double angle_offset = Math.Acos(1 / line.center.Magnitude);
+        double center_angle = Math.Atan2(line.center.Imaginary, line.center.Real);
 
-        double radius = (new Complex(center_x - a.x, center_y - a.y)).Magnitude;
-
-        // draw the arc
-        double angle_offset = Math.Acos(1 / (new Complex(center_x, center_y).Magnitude));
-        double center_angle = Math.Atan2(center_y, center_x);
-
-        DrawArc(Math.Cos(center_angle + angle_offset), Math.Sin(center_angle + angle_offset), Math.Cos(center_angle - angle_offset), Math.Sin(center_angle - angle_offset), radius);
-
+        DrawArc(Math.Cos(center_angle + angle_offset), Math.Sin(center_angle + angle_offset), Math.Cos(center_angle - angle_offset), Math.Sin(center_angle - angle_offset), line.radius);
     }
 
     public void DrawArc(double start_x, double start_y, double stop_x, double stop_y, double radius)
@@ -223,9 +218,12 @@ public partial class MainWindow : Window
             case Key.Right:
                 translation = new MöbiusGyrovector(-PanSpeed, 0);
                 break;
+            case Key.Space:
+                translation = min_point.BoxMinus(opposite_point);
+                break;
         }
 
-
+        RecenterIfNecessary(translation);
         Translate(translation);
         Redraw();
     }
@@ -247,18 +245,54 @@ public partial class MainWindow : Window
     {
         for (int i = 0; i < Lines.Count; i++)
         {
-            Lines[i] = (ds + Lines[i].Item1, ds + Lines[i].Item2);
+            Lines[i] = new MöbiusGyroline(ds + Lines[i].a, ds + Lines[i].b);
         }
+    }
+
+    private void RecenterIfNecessary(MöbiusGyrovector ds)
+    {
+        
+
     }
 
     private void Redraw()
     {
         MyCanvas.Children.Clear();
         DrawCircle(0, 0, 1);
+        DrawPoint(0, 0, Brushes.Red);
         foreach (var line in Lines)
         {
-            DrawLine(line.Item1, line.Item2);
+            DrawLine(line.a, line.b);
         }
+
+        // Get the point on OG hexagon that is closest to the origin. 
+        double min_distance = 9999;
+        double distance;
+        MöbiusGyrovector point;
+        int min_index = -1;
+        for (int i = 0; i < 6; i++)
+        {
+            point = MöbiusGyrovector.NearestPointOnLine(MöbiusGyrovector.Zero, Lines[i]);
+            distance = MöbiusGyrovector.Distance(MöbiusGyrovector.Zero, point);
+            if (distance < min_distance)
+            {
+                min_distance = distance;
+                min_point = point;
+                min_index = i;
+            }
+        }
+
+        DrawPoint(min_point.x, min_point.y, Brushes.Red);
+
+        // try to find the opposite point
+        int antipodal_index = min_index < 3 ? min_index + 3 : min_index - 3;
+        double t = MöbiusGyrovector.Distance(min_point, Lines[min_index].a) / MöbiusGyrovector.Distance(Lines[min_index].b, Lines[min_index].a);
+        opposite_point = Lines[antipodal_index].b + t*(-Lines[antipodal_index].b + Lines[antipodal_index].a);
+        DrawPoint(opposite_point.x, opposite_point.y, Brushes.Green);
+
+        //TODO: Move this all somewhere reasonable (centralize list of points to draw)
+        //TODO: We don't actually need to translate opposite point -> point. We need to translate opposite a -> a and rotate opposite b -> b
+        //TODO: That brings me to my next point. We can no longer avoid angles. Implement them. 
     }
 
 
