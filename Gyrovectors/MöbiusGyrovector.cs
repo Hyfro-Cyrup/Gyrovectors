@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
+using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
+using System.Windows.Shapes;
 
 namespace Gyrovectors;
 
@@ -39,11 +43,34 @@ public readonly struct MöbiusGyrovector : IGyroVector<MöbiusGyrovector, double
     public static double ENormSquared(MöbiusGyrovector a)
         => EInnerProduct(a, a);
 
+    public static double ENorm(MöbiusGyrovector a)
+        => a._value.Magnitude;
+
     public static double Norm(MöbiusGyrovector a)
         => Math.Atanh(a._value.Magnitude / S) / Math.Atanh(UNIT_LENGTH / S);
 
     public static double Distance(MöbiusGyrovector a, MöbiusGyrovector b)
         => Norm(-a + b);
+
+    // true if point b is clockwise of point a, false if b is counterclockwise of a (or they're collinear with the origin)
+    public static bool isClockwise(MöbiusGyrovector a, MöbiusGyrovector b)
+    {
+        // find the k component of the cross product (a x b).
+        // If it's positive, a->b is CCW around the origin. If it's negative, a->b is CW around the origin
+        return a.x * b.y - a.y * b.x < 0;
+    }
+    // returns the signed angle from `a` counterclockwise to `b` (about the origin) in the range (-pi, pi]
+    public static double Angle(MöbiusGyrovector a, MöbiusGyrovector b)
+    {
+        // get the abs value of the angle in [0, pi]
+        // Clamp(x, -1, 1) avoids floating point errors
+        double angle = Math.Acos(Math.Clamp(EInnerProduct(a, b) / (ENorm(a) * ENorm(b)), -1, 1));
+        return isClockwise(a, b) ? -angle : angle;
+    }
+
+    // returns the signed angle from `a` counterclockwise to `b` (about `about`)
+    public static double Angle(MöbiusGyrovector a, MöbiusGyrovector b, MöbiusGyrovector about)
+        => Angle(-about + a, -about + b);
 
     public static MöbiusGyrovector NearestPointOnLine(MöbiusGyrovector point, MöbiusGyroline line)
     {
@@ -57,7 +84,10 @@ public readonly struct MöbiusGyrovector : IGyroVector<MöbiusGyrovector, double
 
     // angle in radians
     public static MöbiusGyrovector Rotate(MöbiusGyrovector a, double angle)
-        => new MöbiusGyrovector(a._value * Complex.Exp(Complex.ImaginaryOne * angle));
+    {
+        if (angle == 0) { return a; }
+        return new MöbiusGyrovector(a._value * Complex.Exp(Complex.ImaginaryOne * angle));
+    }
 
     public static MöbiusGyrovector RotateAround(MöbiusGyrovector a, MöbiusGyrovector center, double angle)
         => center + Rotate(-center + a, angle);

@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Numerics;
 using System.Reflection.Metadata;
 using System.Text;
+using System.Transactions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -11,6 +12,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Media.Media3D;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using static System.Formats.Asn1.AsnWriter;
@@ -34,6 +36,8 @@ public partial class MainWindow : Window
     private static double PanSpeed = 0.02;
     private static List<MöbiusGyroline> Lines = new();
     private static MöbiusGyrovector min_point = MöbiusGyrovector.Zero, opposite_point = MöbiusGyrovector.Zero;
+    private static int min_index = -1;
+    private static bool flag = false;
 
     public MainWindow()
     {
@@ -202,7 +206,8 @@ public partial class MainWindow : Window
     #region Handlers
     private void OnKeyDown(object sender, KeyEventArgs e)
     {
-        MöbiusGyrovector translation = new MöbiusGyrovector(0, 0);
+        MöbiusGyrovector translation = MöbiusGyrovector.Zero;
+        double rotation = 0;
 
         switch (e.Key)
         {
@@ -218,13 +223,10 @@ public partial class MainWindow : Window
             case Key.Right:
                 translation = new MöbiusGyrovector(-PanSpeed, 0);
                 break;
-            case Key.Space:
-                translation = min_point.BoxMinus(opposite_point);
-                break;
         }
 
-        RecenterIfNecessary(translation);
         Translate(translation);
+        RecenterIfNecessary();
         Redraw();
     }
 
@@ -241,17 +243,46 @@ public partial class MainWindow : Window
 
     #endregion
 
-    private void Translate(MöbiusGyrovector ds)
+    private void Translate(MöbiusGyrovector translation)
+        => Transform(translation, 0.0, MöbiusGyrovector.Zero);
+
+    private void Transform(MöbiusGyrovector translation, double rotation, MöbiusGyrovector around)
     {
+        if (flag)
+        {
+            Debug.WriteLine(("around: ", around));
+        }
         for (int i = 0; i < Lines.Count; i++)
         {
-            Lines[i] = new MöbiusGyroline(ds + Lines[i].a, ds + Lines[i].b);
+            Lines[i] = new MöbiusGyroline(MöbiusGyrovector.RotateAround(translation + Lines[i].a, around, rotation),
+                MöbiusGyrovector.RotateAround(translation + Lines[i].b, around, rotation));
         }
     }
 
-    private void RecenterIfNecessary(MöbiusGyrovector ds)
+    private void RecenterIfNecessary()
     {
-        
+        // check if `ds` just took us across one of the 6 main line segments
+        // Note this assumes this method is called directly after Transform()
+        List<int> crossings = new List<int>();
+        for (int i = 0; i < 6; i++)
+        {
+            // if the k component of the cross product a x b is positive, then b is counteclockwise of a relative to the origin (that means we're inside the line)
+            if (Lines[i].a.x * Lines[i].b.y - Lines[i].a.y * Lines[i].b.x < 0) 
+            {
+                crossings.Add(i); 
+            }
+        }
+        foreach (int i in crossings)
+        {
+            // we either crossed one line or we crossed two. Doesn't matter. We can just recenter twice.
+            var line = Lines[i];
+            int opp_index = i < 3 ? i + 3 : i - 3;
+            var opp_line = Lines[opp_index];
+            var translation = line.a.BoxMinus(opp_line.b);
+            var rotation = MöbiusGyrovector.Angle(translation + opp_line.a, line.b, line.a);
+            
+            Transform(translation, rotation, line.a);
+        }
 
     }
 
@@ -269,7 +300,6 @@ public partial class MainWindow : Window
         double min_distance = 9999;
         double distance;
         MöbiusGyrovector point;
-        int min_index = -1;
         for (int i = 0; i < 6; i++)
         {
             point = MöbiusGyrovector.NearestPointOnLine(MöbiusGyrovector.Zero, Lines[i]);
@@ -292,7 +322,6 @@ public partial class MainWindow : Window
 
         //TODO: Move this all somewhere reasonable (centralize list of points to draw)
         //TODO: We don't actually need to translate opposite point -> point. We need to translate opposite a -> a and rotate opposite b -> b
-        //TODO: That brings me to my next point. We can no longer avoid angles. Implement them. 
     }
 
 
