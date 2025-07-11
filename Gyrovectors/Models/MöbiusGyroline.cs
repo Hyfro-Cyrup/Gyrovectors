@@ -5,7 +5,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Gyrovectors;
+namespace Gyrovectors.Models;
 
 public readonly struct MöbiusGyroline
 {
@@ -22,7 +22,7 @@ public readonly struct MöbiusGyroline
         double center_x = A + B * center_y;
 
         center = new Complex(center_x, center_y);
-        radius = (new Complex(center_x - a.x, center_y - a.y)).Magnitude;
+        radius = new Complex(center_x - a.x, center_y - a.y).Magnitude;
     }
 
 }

@@ -5,7 +5,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Gyrovectors;
+namespace Gyrovectors.Models;
 
 public interface IVector<V, S> :
     IEquatable<V>,

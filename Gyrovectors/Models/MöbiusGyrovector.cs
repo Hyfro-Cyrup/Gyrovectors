@@ -11,7 +11,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 using System.Windows.Shapes;
 
-namespace Gyrovectors;
+namespace Gyrovectors.Models;
 
 public readonly struct MöbiusGyrovector : IGyroVector<MöbiusGyrovector, double>
 {
@@ -35,7 +35,7 @@ public readonly struct MöbiusGyrovector : IGyroVector<MöbiusGyrovector, double
     public double y => _value.Imaginary;
 
     public static MöbiusGyrovector Gyr(MöbiusGyrovector a, MöbiusGyrovector b, MöbiusGyrovector c)
-        => new MöbiusGyrovector(((a + b)._value / (b + a)._value) * c._value);
+        => new MöbiusGyrovector((a + b)._value / (b + a)._value * c._value);
 
     // This is very sadly not related to any norm in hyperbolic geometry
     public static double EInnerProduct(MöbiusGyrovector a, MöbiusGyrovector b)
@@ -137,21 +137,21 @@ public readonly struct MöbiusGyrovector : IGyroVector<MöbiusGyrovector, double
             return new MöbiusGyrovector((u._value + v._value) / (1 + Complex.Conjugate(u._value) * v._value));
         }
         // This is the general formula that works in the S-ball of any inner product space. 
-        double uv = MöbiusGyrovector.EInnerProduct(u, v);
-        double u2 = MöbiusGyrovector.ENormSquared(u);
-        double v2 = MöbiusGyrovector.ENormSquared(v);
+        double uv = EInnerProduct(u, v);
+        double u2 = ENormSquared(u);
+        double v2 = ENormSquared(v);
         const double S2 = S * S;
         const double S4 = S2 * S2;
         return new MöbiusGyrovector(
-            ((1 + (2.0 / S2) * uv + (1.0 / S2) * v2) * u._value + (1 - (1.0 / S2) * u2) * v._value) /
-            (1 + (2.0 / S2) * uv + (1.0 / S4) * u2 * v2));
+            ((1 + 2.0 / S2 * uv + 1.0 / S2 * v2) * u._value + (1 - 1.0 / S2 * u2) * v._value) /
+            (1 + 2.0 / S2 * uv + 1.0 / S4 * u2 * v2));
     }
 
     public static MöbiusGyrovector operator -(MöbiusGyrovector value) 
         => new MöbiusGyrovector(-value._value);
 
     public static MöbiusGyrovector operator -(MöbiusGyrovector left, MöbiusGyrovector right)
-        => left + (-right);
+        => left + -right;
 
     public static MöbiusGyrovector CoAddition(MöbiusGyrovector a, MöbiusGyrovector b)
         => a + Gyr(a, -b, b);

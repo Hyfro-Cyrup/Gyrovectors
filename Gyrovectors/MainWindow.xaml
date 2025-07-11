@@ -3,12 +3,30 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Gyrovectors"
+        xmlns:local="clr-namespace:Gyrovectors" 
+        xmlns:utils="clr-namespace:Gyrovectors.Utils"
+        xmlns:views="clr-namespace:Gyrovectors.Views"
+        xmlns:components="clr-namespace:Gyrovectors.Views.Components"
+        xmlns:viewmodels="clr-namespace:Gyrovectors.ViewModels"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Canvas Name="MyCanvas">
-        <Canvas.LayoutTransform>
-            <ScaleTransform ScaleX="1" ScaleY="-1" CenterX=".5" CenterY=".5" />
-        </Canvas.LayoutTransform>
-    </Canvas>
+        d:DataContext="{d:DesignInstance viewmodels:PoincareDiskViewModel, IsDesignTimeCreatable=True}"
+        Title="MainWindow" Height="450" Width="550">
+    <components:ZoomGrid Background="DarkGreen" ZoomFactor="1.05">
+        <views:PoincareDiskView
+            Lines="{Binding Lines}"
+            Grid="{Binding Grid}"
+            Width="200" Height="200" 
+            HorizontalAlignment="Center" VerticalAlignment="Center" />
+            
+    </components:ZoomGrid>
+
+
+    <Window.InputBindings>
+        <KeyBinding Key="Up" Command="{Binding MoveCommand}" CommandParameter="{x:Static utils:Direction.Up}" />
+        <KeyBinding Key="Down" Command="{Binding MoveCommand}" CommandParameter="{x:Static utils:Direction.Down}" />
+        <KeyBinding Key="Left" Command="{Binding MoveCommand}" CommandParameter="{x:Static utils:Direction.Left}" />
+        <KeyBinding Key="Right" Command="{Binding MoveCommand}" CommandParameter="{x:Static utils:Direction.Right}" />
+    </Window.InputBindings>
+
+
 </Window>
