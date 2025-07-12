@@ -16,7 +16,7 @@ namespace Gyrovectors.Models;
 public readonly struct MöbiusGyrovector : IGyroVector<MöbiusGyrovector, double>
 {
     public const double S = 1; // Gyrovectors live in the S-ball of the complex plane
-    private static readonly double UNIT_LENGTH = Math.Tanh(1.0 / 2.0); // Used in the Norm formula; asserts that MöbiusGyrovector(UNIT_LENGTH, 0) has norm 1. Would be const if Math.Tanh was a constexpr
+    public static readonly double UNIT_LENGTH = Math.Tanh(1.0 / 2.0); // Used in the Norm formula; asserts that MöbiusGyrovector(UNIT_LENGTH, 0) has norm 1. Would be const if Math.Tanh was a constexpr
 
     readonly Complex _value;
 

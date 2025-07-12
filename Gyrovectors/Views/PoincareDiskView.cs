@@ -11,6 +11,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
 namespace Gyrovectors.Views;
@@ -107,22 +108,25 @@ public class PoincareDiskView : CircularCanvas
 
         foreach (var line in Lines)
         {
-            DrawGyroline(line, dc, Base_Pen);
+            DrawGyroSegment(line, dc, Base_Pen);
         }
 
         // Highlight the origin square
         for (int i = 0; i < 6; i++)
         {
             DrawGyroSegment(Grid.Lines[i], dc, Red_Pen);
-            DrawGyrovector(Grid.Lines[i].a, dc, Pens[i + 1], 2);
+            DrawGyrovector(Grid.Lines[i].a, dc, Pens[i +1], 2);
         }
+        DrawGyrovector(MöbiusGyrovector.Zero, dc, Cyan_Pen);
+
+        DrawImage(Lines, dc);
     }
     #endregion
 
     #region Convert Coordinates
     private Point World2Screen(double x, double y) // convert points
     {
-        return new(Radius*x + Center.X, Radius*y + Center.Y);
+        return new(Center.X + Radius*x,  Center.Y - Radius*y);
     }
     private Point World2Screen(Complex z) => World2Screen(z.Real, z.Imaginary);
     private Point World2Screen(MöbiusGyrovector a) => World2Screen(a.x, a.y);
@@ -134,7 +138,7 @@ public class PoincareDiskView : CircularCanvas
     private void DrawGyroline(MöbiusGyroline line, DrawingContext dc, Pen pen)
     {
         // If the line is not extreme, we can draw it as an ellipse.
-        if (line.radius < 100)
+        if (line.radius < 50)
         {
             var radius = World2Screen(line.radius);
             dc.DrawEllipse(null, pen, World2Screen(line.center), radius, radius);
@@ -156,16 +160,7 @@ public class PoincareDiskView : CircularCanvas
 
     private void DrawEuclideanArc(MöbiusGyrovector Start, MöbiusGyrovector Stop, double Radius, DrawingContext dc, Pen pen)
     {
-        var radius = World2Screen(Radius);
-        var arc = new ArcSegment(
-            World2Screen(Stop),
-            new Size(radius, radius),
-            0,
-            false,
-            MöbiusGyrovector.isClockwise(Start, Stop) ? SweepDirection.Clockwise : SweepDirection.Counterclockwise,
-            true
-            );
-        var fig = new PathFigure(World2Screen(Start), [arc], false);
+        var fig = GenerateArcPathFigure(Start, Stop, Radius);
         var geo = new PathGeometry([fig]);
 
         dc.DrawGeometry(null, pen, geo);
@@ -174,6 +169,38 @@ public class PoincareDiskView : CircularCanvas
     private void DrawGyrovector(MöbiusGyrovector a, DrawingContext dc, Pen pen, int weight=1)
     {
         dc.DrawEllipse(pen.Brush, pen, World2Screen(a), weight, weight);
+    }
+
+    private ArcSegment GenerateArcSegment(MöbiusGyrovector Start, MöbiusGyrovector Stop, double Radius)
+    {
+        var radius = World2Screen(Radius);
+        return new ArcSegment(
+            World2Screen(Stop),
+            new Size(radius, radius),
+            0,
+            false,
+            MöbiusGyrovector.isClockwise(Start, Stop) ? SweepDirection.Counterclockwise : SweepDirection.Clockwise,
+            true
+            );
+    }
+
+    private PathFigure GenerateArcPathFigure(MöbiusGyrovector Start, MöbiusGyrovector Stop, double Radius)
+    {
+        return new PathFigure(World2Screen(Start), [GenerateArcSegment(Start, Stop, Radius)], false);
+    }
+
+    // four_lines must be 4 lines sharing endpoints oriented CCW
+    private void DrawImage(IEnumerable<MöbiusGyroline> four_lines, DrawingContext dc)
+    {
+        var fig = new PathFigure(World2Screen(four_lines.First().a), from line in four_lines select GenerateArcSegment(line.a, line.b, line.radius), true);
+        var geo = new PathGeometry([fig]);
+        var image = new BitmapImage(new Uri("https://i.sstatic.net/tekbA.jpg"));
+        var imageBrush = new ImageBrush(image)
+        {
+            Stretch = Stretch.Fill // or Uniform / UniformToFill depending on desired mapping
+        };
+        dc.DrawGeometry(imageBrush, null, geo);
+
     }
 
     #endregion

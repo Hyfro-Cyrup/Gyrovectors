@@ -16,8 +16,10 @@
             Lines="{Binding Lines}"
             Grid="{Binding Grid}"
             Width="200" Height="200" 
-            HorizontalAlignment="Center" VerticalAlignment="Center" />
+            HorizontalAlignment="Center" VerticalAlignment="Center" >
             
+        </views:PoincareDiskView>
+
     </components:ZoomGrid>
 
 
@@ -26,6 +28,7 @@
         <KeyBinding Key="Down" Command="{Binding MoveCommand}" CommandParameter="{x:Static utils:Direction.Down}" />
         <KeyBinding Key="Left" Command="{Binding MoveCommand}" CommandParameter="{x:Static utils:Direction.Left}" />
         <KeyBinding Key="Right" Command="{Binding MoveCommand}" CommandParameter="{x:Static utils:Direction.Right}" />
+        <KeyBinding Key="Space" Command="{Binding ToggleRecenterCommand}" />
     </Window.InputBindings>
 
 
