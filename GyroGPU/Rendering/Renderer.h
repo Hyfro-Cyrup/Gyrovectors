@@ -4,20 +4,23 @@
 #include <GL/glew.h>
 
 #include "RenderPrimitive.h"
+#include "Camera.h"
 
 class Renderer {
 private:
 	GLuint quadVBO, quadVAO,
 		compute_shader_program, 
 		regular_shader_program, 
-		texture, ssbo;
+		texture, ssbo, 
+		viewMatrixLoc, 
+		projectionMatrixLoc;
 
 	int _width, _height;
 
 public:
 	Renderer(int width, int height);
 
-	void Render();
+	void Render(Camera& worldCamera);
 
 	void Resize(int width, int height);
 

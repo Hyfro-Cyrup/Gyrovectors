@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -132,71 +132,51 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Rendering\Camera.cpp"><DependentUpon>Rendering/Camera.h</DependentUpon></ClCompile>
     <ClCompile Include="Components\CollisionComponent.cpp">
-      <DependentUpon>Components/CollisionComponent.h</DependentUpon>
-    </ClCompile>
+      <DependentUpon>Components/CollisionComponent.h</DependentUpon></ClCompile>
     <ClCompile Include="Components\IRenderComponent.cpp">
-      <DependentUpon>Components/IRenderComponent.h</DependentUpon>
-    </ClCompile>
+      <DependentUpon>Components/IRenderComponent.h</DependentUpon></ClCompile>
     <ClCompile Include="Shapes\Circle.cpp">
-      <DependentUpon>Shapes/Circle.h</DependentUpon>
-    </ClCompile>
+      <DependentUpon>Shapes/Circle.h</DependentUpon></ClCompile>
     <ClCompile Include="Shapes\LineSegment.cpp">
-      <DependentUpon>Shapes/LineSegment.h</DependentUpon>
-    </ClCompile>
+      <DependentUpon>Shapes/LineSegment.h</DependentUpon></ClCompile>
     <ClCompile Include="Components\Painted\LineRenderComponent.cpp">
-      <DependentUpon>Components/Painted/LineRenderComponent.h</DependentUpon>
-    </ClCompile>
+      <DependentUpon>Components/Painted/LineRenderComponent.h</DependentUpon></ClCompile>
     <ClCompile Include="Components\PositionComponent.cpp">
-      <DependentUpon>Components/PositionComponent.h</DependentUpon>
-    </ClCompile>
+      <DependentUpon>Components/PositionComponent.h</DependentUpon></ClCompile>
     <ClCompile Include="Shapes\Point.cpp">
-      <DependentUpon>Shapes/Point.h</DependentUpon>
-    </ClCompile>
+      <DependentUpon>Shapes/Point.h</DependentUpon></ClCompile>
     <ClCompile Include="Shapes\Polygon.cpp">
-      <DependentUpon>Shapes/Polygon.h</DependentUpon>
-    </ClCompile>
+      <DependentUpon>Shapes/Polygon.h</DependentUpon></ClCompile>
     <ClCompile Include="Components\Textured\RegularTexturedPolygon.cpp">
-      <DependentUpon>Components/Textured/RegularTexturedPolygon.h</DependentUpon>
-    </ClCompile>
+      <DependentUpon>Components/Textured/RegularTexturedPolygon.h</DependentUpon></ClCompile>
     <ClCompile Include="Components\Textured\TexturedPolygon.cpp">
-      <DependentUpon>Components/Textured/TexturedPolygon.h</DependentUpon>
-    </ClCompile>
+      <DependentUpon>Components/Textured/TexturedPolygon.h</DependentUpon></ClCompile>
     <ClCompile Include="Components\VelocityComponent.cpp">
-      <DependentUpon>Components/VelocityComponent.h</DependentUpon>
-    </ClCompile>
+      <DependentUpon>Components/VelocityComponent.h</DependentUpon></ClCompile>
     <ClCompile Include="Math\Gyrotile.cpp">
-      <DependentUpon>Math/Gyrotile.h</DependentUpon>
-    </ClCompile>
+      <DependentUpon>Math/Gyrotile.h</DependentUpon></ClCompile>
     <ClCompile Include="Rendering\Renderer.cpp">
-      <DependentUpon>Rendering/Renderer.h</DependentUpon>
-    </ClCompile>
+      <DependentUpon>Rendering/Renderer.h</DependentUpon></ClCompile>
     <ClCompile Include="Systems\PhysicsSystem.cpp">
-      <DependentUpon>Systems/PhysicsSystem.h</DependentUpon>
-    </ClCompile>
+      <DependentUpon>Systems/PhysicsSystem.h</DependentUpon></ClCompile>
     <ClCompile Include="Systems\RenderSystem.cpp">
-      <DependentUpon>Systems/RenderSystem.h</DependentUpon>
-    </ClCompile>
+      <DependentUpon>Systems/RenderSystem.h</DependentUpon></ClCompile>
     <ClCompile Include="Rendering\shadertools.cpp">
-      <DependentUpon>Rendering/shadertools.h</DependentUpon>
-    </ClCompile>
+      <DependentUpon>Rendering/shadertools.h</DependentUpon></ClCompile>
     <ClCompile Include="stb_implementation.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Rendering\Texture\Texture.cpp">
-      <DependentUpon>Rendering/Texture/Texture.h</DependentUpon>
-    </ClCompile>
+      <DependentUpon>Rendering/Texture/Texture.h</DependentUpon></ClCompile>
     <ClCompile Include="Rendering\Texture\TextureManager.cpp">
-      <DependentUpon>Rendering/Texture/TextureManager.h</DependentUpon>
-    </ClCompile>
+      <DependentUpon>Rendering/Texture/TextureManager.h</DependentUpon></ClCompile>
     <ClCompile Include="TickTimer.cpp">
-      <DependentUpon>TickTimer.h</DependentUpon>
-    </ClCompile>
+      <DependentUpon>TickTimer.h</DependentUpon></ClCompile>
     <ClCompile Include="Math\MobiusGyrovector.cpp">
-      <DependentUpon>Math/MobiusGyrovector.h</DependentUpon>
-    </ClCompile>
+      <DependentUpon>Math/MobiusGyrovector.h</DependentUpon></ClCompile>
     <ClCompile Include="Window.cpp">
-      <DependentUpon>Window.h</DependentUpon>
-    </ClCompile>
+      <DependentUpon>Window.h</DependentUpon></ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Rendering\Shaders\compute.glsl" />
@@ -207,6 +187,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h" />
+    <ClInclude Include="Rendering\Camera.h" />
     <ClInclude Include="Components\Component.h" />
     <ClInclude Include="Shapes\Circle.h" />
     <ClInclude Include="Shapes\IGeometry.h" />

@@ -24,7 +24,8 @@
 #include "Components/Textured/RegularTexturedPolygon.h"
 #include "glm/ext/vector_float2.hpp"
 #include "Systems/PhysicsSystem.h"
-#include <Components/PositionComponent.h>
+#include "Components/PositionComponent.h"
+#include "Rendering/Camera.h"
 
 class App {
 	int width{ 1800 }, height{ 1800 };
@@ -46,7 +47,8 @@ public:
 		bool running = true;
 		TickTimer timer{ 60 }; // 60fps
 		std::vector<std::unique_ptr<GameObject>> scene;
-		MobiusTransformation camera;
+		MobiusTransformation gyroCamera;
+		Camera worldCamera{ width, height };
 
 		// start sandbox region
 		scene.emplace_back(std::make_unique<GameObject>());
@@ -105,6 +107,9 @@ public:
 				case SDL_QUIT:
 					running = false;
 					break;
+				case SDL_MOUSEWHEEL:
+					worldCamera.zoom(windowEvent.wheel.y);
+					break;
 				case SDL_KEYDOWN:
 					MobiusGyrovector translate = MobiusGyrovector::Zero;
 					switch (windowEvent.key.keysym.sym) {
@@ -120,8 +125,24 @@ public:
 					case SDLK_RIGHT:
 						translate = MobiusGyrovector(-0.05, 0.0);
 						break;
+					case SDLK_w:
+						worldCamera.move(0.0f, 0.05f, 0.0f);
+						worldCamera.point(0.0f, 0.05f, 0.0f);
+						break;
+					case SDLK_a:
+						worldCamera.move(-0.05f, 0.0f, 0.0f);
+						worldCamera.point(-0.05f, 0.0f, 0.0f);
+						break;
+					case SDLK_s:
+						worldCamera.move(0.0f, -0.05f, 0.0f);
+						worldCamera.point(0.0f, -0.05f, 0.0f);
+						break;
+					case SDLK_d:
+						worldCamera.move(0.05f, 0.0f, 0.0f);
+						worldCamera.point(0.05f, 0.0f, 0.0f);
+						break;
 					}
-					camera.Translate(translate);
+					gyroCamera.Translate(translate);
 					break;
 				}
 			}
@@ -145,7 +166,7 @@ public:
 				timer.decrement();
 			}
 
-			renderSystem.RenderScene(scene, camera);
+			renderSystem.RenderScene(scene, gyroCamera, worldCamera);
 			window.SwapBuffers();
 
 		}

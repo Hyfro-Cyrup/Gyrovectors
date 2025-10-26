@@ -2,34 +2,34 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Components">
-      <UniqueIdentifier>{d771cd98f0295c490433fcfe19850073}</UniqueIdentifier>
+      <UniqueIdentifier>{87b2bad5f923c55c0d16088ced534f14}</UniqueIdentifier>
       </Filter>
     <Filter Include="Components\Painted">
-      <UniqueIdentifier>{6ba869991f9a1719d1274c72b685c261}</UniqueIdentifier>
+      <UniqueIdentifier>{b09c65256332be4741e6dd28b50a154e}</UniqueIdentifier>
       </Filter>
     <Filter Include="Components\Textured">
-      <UniqueIdentifier>{6a9011decc4df83159e359ac0a354ca2}</UniqueIdentifier>
+      <UniqueIdentifier>{e75fd6392dbace3ade78695ccc91fd4e}</UniqueIdentifier>
       </Filter>
     <Filter Include="Math">
-      <UniqueIdentifier>{73bf473318908db9ca05ff4428821880}</UniqueIdentifier>
+      <UniqueIdentifier>{c1b513fae4f0a5034cec58aca9b57492}</UniqueIdentifier>
       </Filter>
     <Filter Include="Rendering">
-      <UniqueIdentifier>{0781df6bd484a5ac2b72e13991f227f0}</UniqueIdentifier>
+      <UniqueIdentifier>{0bed99eae4433e7a715c1c2021b59629}</UniqueIdentifier>
       </Filter>
     <Filter Include="Rendering\Shaders">
-      <UniqueIdentifier>{04327dffaa058d08be2adaedbfb491b4}</UniqueIdentifier>
+      <UniqueIdentifier>{85ac49d70f79339ff92127d962b57506}</UniqueIdentifier>
       </Filter>
     <Filter Include="Rendering\Texture">
-      <UniqueIdentifier>{aa5cfb13cad71ad001f63219eb007fc0}</UniqueIdentifier>
+      <UniqueIdentifier>{a0620ab317f3ce63366be6f9de57a538}</UniqueIdentifier>
       </Filter>
     <Filter Include="Resources">
-      <UniqueIdentifier>{316bd427780e42c49cf9b0221d262827}</UniqueIdentifier>
+      <UniqueIdentifier>{476fb70ad9cfb7554dfa95ea0b5cd057}</UniqueIdentifier>
       </Filter>
     <Filter Include="Shapes">
-      <UniqueIdentifier>{d7a5a57077b7ea5eae65ca4831c042cc}</UniqueIdentifier>
+      <UniqueIdentifier>{762afc537192479a1bc05fb35db41e62}</UniqueIdentifier>
       </Filter>
     <Filter Include="Systems">
-      <UniqueIdentifier>{f71bc186850b1099ee72c95831c422eb}</UniqueIdentifier>
+      <UniqueIdentifier>{bbfc11d18078022f7271fe19f6691fda}</UniqueIdentifier>
       </Filter>
     </ItemGroup>
   <ItemGroup>
@@ -63,6 +63,9 @@
       </ClCompile>
     <ClCompile Include="Math\MobiusGyrovector.cpp">
       <Filter>Math</Filter>
+      </ClCompile>
+    <ClCompile Include="Rendering\Camera.cpp">
+      <Filter>Rendering</Filter>
       </ClCompile>
     <ClCompile Include="Rendering\Renderer.cpp">
       <Filter>Rendering</Filter>
@@ -153,6 +156,9 @@
       </ClInclude>
     <ClInclude Include="Math\MobiusTransformation.h">
       <Filter>Math</Filter>
+      </ClInclude>
+    <ClInclude Include="Rendering\Camera.h">
+      <Filter>Rendering</Filter>
       </ClInclude>
     <ClInclude Include="Rendering\Renderer.h">
       <Filter>Rendering</Filter>

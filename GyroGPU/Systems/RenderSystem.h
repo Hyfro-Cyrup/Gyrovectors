@@ -7,6 +7,7 @@
 
 #include "Rendering/RenderPrimitive.h"
 #include "Rendering/Renderer.h"
+#include "Rendering/Camera.h"
 #include "Math/MobiusGyrovector.h"
 #include "Math/MobiusGyroline.h"
 #include "Math/MobiusTransformation.h"
@@ -23,7 +24,7 @@ public:
 	// constructor
 	RenderSystem(int width, int height) : renderer{ width, height } {}
 
-	void RenderScene(std::vector<std::unique_ptr<GameObject>>& scene, MobiusTransformation& camera);
+	void RenderScene(std::vector<std::unique_ptr<GameObject>>& scene, MobiusTransformation& camera, Camera& worldCamera);
 
 	void Resize(int width, int height) {
 		renderer.Resize(width, height);
@@ -31,14 +32,14 @@ public:
 
 private:
 	// push to low-level renderer
-	void Render() {
+	void Render(Camera& worldCamera) {
 		// Sort so higher z is first
 		std::vector<RenderPrimitive> sorted = primitives;
 		std::sort(sorted.begin(), sorted.end(),
 			[](const auto& a, const auto& b) { return a.z > b.z; });
 
 		renderer.PopulateComputeBuffer(primitives);
-		renderer.Render();
+		renderer.Render(worldCamera);
 	}
 
 	void Clear() {

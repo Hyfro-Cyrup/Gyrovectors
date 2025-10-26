@@ -5,6 +5,7 @@
 
 #include <GL/glew.h>
 
+#include "Camera.h"
 #include "RenderPrimitive.h"
 #include "shadertools.h"
 #include <iostream>
@@ -38,16 +39,29 @@ Renderer::Renderer(int width, int height) : _width{ width }, _height{ height } {
 	loc = glGetUniformLocation(compute_shader_program, "HEIGHT");
 	glUniform1i(loc, static_cast<GLint>(_height));
 
+	viewMatrixLoc = glGetUniformLocation(regular_shader_program, "view");
+	projectionMatrixLoc = glGetUniformLocation(regular_shader_program, "projection");
+
 
 	// establish the background color (I think this only has to happen once)
 	glClearColor(0.2f, 0.8f, 0.4f, 1.0f);
 }
 
-void Renderer::Render() {
+void Renderer::Render(Camera& worldCamera) {
 	// clear the screen
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
 	DispatchComputeShader();
+
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glUseProgram(regular_shader_program);
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	// Set the texture uniform in the fragment shader
+	glUniform1i(glGetUniformLocation(regular_shader_program, "outputTexture"), 0); // Texture unit 0
+	worldCamera.bindUniforms(viewMatrixLoc, projectionMatrixLoc);
 
 	RenderQuad();
 
@@ -174,18 +188,10 @@ void Renderer::DispatchComputeShader() const {
 }
 
 void Renderer::RenderQuad() const {
-	glBindTexture(GL_TEXTURE_2D, texture);
-	glUseProgram(regular_shader_program);  // Use the shader program for rendering
-
-	glActiveTexture(GL_TEXTURE0); // Activate texture unit 0
-	glBindTexture(GL_TEXTURE_2D, texture); // Bind the texture you want to render
-
-	// Set the texture uniform in the fragment shader
-	glUniform1i(glGetUniformLocation(regular_shader_program, "outputTexture"), 0); // Texture unit 0
+	
 
 	// Render the full-screen quad
 	glBindVertexArray(quadVAO);
-	glDrawArrays(GL_TRIANGLES, 0, 6);  // 6 vertices for the full-screen quad
-	glBindVertexArray(0);  // Unbind the VAO
+	glDrawArrays(GL_TRIANGLES, 0, 6); 
+	glBindVertexArray(0);
 }
-

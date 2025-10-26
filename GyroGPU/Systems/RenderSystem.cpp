@@ -14,11 +14,13 @@
 #include "Math/MobiusGyrovector.h"
 #include "Math/MobiusTransformation.h"
 #include "Rendering/RenderPrimitive.h"
+#include "Rendering/Camera.h"
 #include <iostream>
 
-void RenderSystem::RenderScene(std::vector<std::unique_ptr<GameObject>>& scene, MobiusTransformation& camera) {
+void RenderSystem::RenderScene(std::vector<std::unique_ptr<GameObject>>& scene, MobiusTransformation& camera, Camera& worldCamera) {
 	Clear();
 	SetCamera(camera);
+	
 	for (auto& obj : scene) {
 		IRenderComponent* comp = obj->getComponent<RENDER>();
 		if (comp) {
@@ -27,7 +29,7 @@ void RenderSystem::RenderScene(std::vector<std::unique_ptr<GameObject>>& scene, 
 			comp->SubmitTo(*this, model);
 		}
 	}
-	Render();
+	Render(worldCamera);
 }
 
 void RenderSystem::Add(const LineRenderComponent& comp, MobiusTransformation& model) {
