@@ -21,6 +21,7 @@ public:
 	// TODO: implement cool matrix math stuff to make this motion relative to local coordinates instead of world coordinates
 	void move(GLfloat, GLfloat, GLfloat);
 	void point(GLfloat, GLfloat, GLfloat);
+	void strafe(GLfloat, GLfloat);
 
 	void setAspectRatio(double ratio);
 	void setAspectRatio(int width, int height);

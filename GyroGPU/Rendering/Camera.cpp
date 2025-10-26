@@ -38,6 +38,11 @@ void Camera::point(GLfloat dx, GLfloat dy, GLfloat dz) {
 	center += glm::vec3(dx, dy, dz) * scale;
 }
 
+void Camera::strafe(GLfloat dx, GLfloat dy) {
+	move(dx, dy, 0.0f);
+	point(dx, dy, 0.0f);
+}
+
 void Camera::setAspectRatio(double ratio) { aspectRatio = (float)ratio; }
 void Camera::setAspectRatio(int width, int height) { aspectRatio = (float)width / (float)height; }
 

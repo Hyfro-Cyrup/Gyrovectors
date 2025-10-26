@@ -26,6 +26,7 @@
 #include "Systems/PhysicsSystem.h"
 #include "Components/PositionComponent.h"
 #include "Rendering/Camera.h"
+#include "SDL_mouse.h"
 
 class App {
 	int width{ 1800 }, height{ 1800 };
@@ -49,6 +50,8 @@ public:
 		std::vector<std::unique_ptr<GameObject>> scene;
 		MobiusTransformation gyroCamera;
 		Camera worldCamera{ width, height };
+		bool dragging = false;
+		int lastX = 0, lastY = 0;
 
 		// start sandbox region
 		scene.emplace_back(std::make_unique<GameObject>());
@@ -110,6 +113,29 @@ public:
 				case SDL_MOUSEWHEEL:
 					worldCamera.zoom(windowEvent.wheel.y);
 					break;
+				case SDL_MOUSEBUTTONDOWN:
+					if ((SDL_GetModState() & KMOD_CTRL) && windowEvent.button.button == SDL_BUTTON_LEFT) {
+						dragging = true;
+						lastX = windowEvent.button.x;
+						lastY = windowEvent.button.y;
+					}
+					break;
+
+				case SDL_MOUSEBUTTONUP:
+					if (windowEvent.button.button == SDL_BUTTON_LEFT)
+						dragging = false;
+					break;
+
+				case SDL_MOUSEMOTION:
+					if (dragging) {
+						float dx = 2.0*(float)(lastX - windowEvent.motion.x) / width;
+						float dy = 2.0*(float)(windowEvent.motion.y - lastY) / height;
+						worldCamera.strafe(dx, dy);
+						lastX = windowEvent.motion.x;
+						lastY = windowEvent.motion.y;
+					}
+					break;
+				
 				case SDL_KEYDOWN:
 					MobiusGyrovector translate = MobiusGyrovector::Zero;
 					switch (windowEvent.key.keysym.sym) {
@@ -126,20 +152,16 @@ public:
 						translate = MobiusGyrovector(-0.05, 0.0);
 						break;
 					case SDLK_w:
-						worldCamera.move(0.0f, 0.05f, 0.0f);
-						worldCamera.point(0.0f, 0.05f, 0.0f);
+						worldCamera.strafe(0.0f, 0.05f);
 						break;
 					case SDLK_a:
-						worldCamera.move(-0.05f, 0.0f, 0.0f);
-						worldCamera.point(-0.05f, 0.0f, 0.0f);
+						worldCamera.strafe(-0.05f, 0.0f);
 						break;
 					case SDLK_s:
-						worldCamera.move(0.0f, -0.05f, 0.0f);
-						worldCamera.point(0.0f, -0.05f, 0.0f);
+						worldCamera.strafe(0.0f, -0.05f);
 						break;
 					case SDLK_d:
-						worldCamera.move(0.05f, 0.0f, 0.0f);
-						worldCamera.point(0.05f, 0.0f, 0.0f);
+						worldCamera.strafe(0.05f, 0.0f);
 						break;
 					}
 					gyroCamera.Translate(translate);
