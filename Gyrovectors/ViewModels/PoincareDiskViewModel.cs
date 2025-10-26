@@ -1,11 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using Gyrovectors.Models;
+using Gyrovectors.Utils;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
-
-using Gyrovectors.Utils;
-using System.Runtime.CompilerServices;
-using System.Diagnostics;
 
 namespace Gyrovectors.ViewModels;
 
@@ -66,7 +63,7 @@ public class PoincareDiskViewModel
         TranslateAll(translation);
         if (_shouldRecenter)
         {
-            RecenterIfNecessary();    
+            RecenterIfNecessary();
         }
 
         OnDataChange();

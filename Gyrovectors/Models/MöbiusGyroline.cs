@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Numerics;
 
 namespace Gyrovectors.Models;
 
@@ -13,7 +8,8 @@ public readonly struct MöbiusGyroline
     public readonly Complex center;
     public readonly double radius;
 
-    public MöbiusGyroline(MöbiusGyrovector a, MöbiusGyrovector b) {
+    public MöbiusGyroline(MöbiusGyrovector a, MöbiusGyrovector b)
+    {
         this.a = a;
         this.b = b;
         double center_x, center_y;
@@ -27,7 +23,7 @@ public readonly struct MöbiusGyroline
             // (1 is the radius of the Poincare Disk, where gyrolines meet perpinducularly)
             center_y = (MöbiusGyrovector.ENormSquared(a) - 2 * A * a.x + 1) / (2 * (B * a.x + a.y));
             center_x = A + B * center_y;
-        } 
+        }
         else
         {
             if (a.y == b.y)
@@ -40,10 +36,10 @@ public readonly struct MöbiusGyroline
             // Substitute that value into the condition that 1, |(x,y)-a|, and |(x,y)| form a right triangle
             // (1 is the radius of the Poincare Disk, where gyrolines meet perpinducularly)
             center_x = (MöbiusGyrovector.ENormSquared(a) + 1 - 2 * a.y * center_y) / (2 * a.x);
-            
+
         }
 
-            center = new Complex(center_x, center_y);
+        center = new Complex(center_x, center_y);
         radius = new Complex(center_x - a.x, center_y - a.y).Magnitude;
     }
 

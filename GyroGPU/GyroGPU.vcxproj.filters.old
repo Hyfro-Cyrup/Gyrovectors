@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Collision">
+      <UniqueIdentifier>{24cda7e41c0b38e919c30dbd1b841f45}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Collision/Shapes">
+      <UniqueIdentifier>{f5e8677e98efac60571d5a4f01eda1b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components">
+      <UniqueIdentifier>{e94a8d5de184d9b03cc9f02c92fc6432}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External/GLEW/include/GL">
+      <UniqueIdentifier>{520ebb23251191f6d730033f30f09790}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External/GLM/glm/detail">
+      <UniqueIdentifier>{43ccb050f6d5c52326564627fc7ff55a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External/GLM/glm/simd">
+      <UniqueIdentifier>{296b111b78dad366b04fbfac32061ed8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External/SDL2/include">
+      <UniqueIdentifier>{16b2ed039c89a5d00dcb7aa513753446}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External/SDL2_mixer/include">
+      <UniqueIdentifier>{ff3f03822221d842fd29365c389e82e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External/SDL2_ttf/include">
+      <UniqueIdentifier>{2b6b3d6139f4e6835f46cacfdbb5304f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External/STB">
+      <UniqueIdentifier>{ca32b300162fd8a96f6ef7e98fc7cfcd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Math">
+      <UniqueIdentifier>{401520cf7a6b492ded8cd31cf974d145}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering">
+      <UniqueIdentifier>{3c0b6a24af627e11f6bd11f351c04477}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Systems">
+      <UniqueIdentifier>{28565f3cd6edc81a6c209c4d6ea265ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering\Texture">
+      <UniqueIdentifier>{38f0e6953975c33b78de91f80b336087}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="stb_implementation.cpp" />
+    <ClCompile Include="TickTimer.cpp" />
+    <ClCompile Include="Collision\Shapes\Circle.cpp" />
+    <ClCompile Include="Collision\Shapes\LineSegment.cpp" />
+    <ClCompile Include="Components\LineRenderComponent.cpp" />
+    <ClCompile Include="Components\ProjectilePhysicsComponent.cpp" />
+    <ClCompile Include="Collision\Shapes\Point.cpp" />
+    <ClCompile Include="Collision\Shapes\Polygon.cpp" />
+    <ClCompile Include="Components\RegularTexturedPolygon.cpp" />
+    <ClCompile Include="Components\TexturedPolygon.cpp" />
+    <ClCompile Include="Math\Gyrotile.h.cpp" />
+    <ClCompile Include="Systems\RenderSystem.cpp" />
+    <ClCompile Include="Rendering\shadertools.cpp" />
+    <ClCompile Include="Rendering\Texture\TextureManager.cpp" />
+    <ClCompile Include="Math\MobiusGyrovector.cpp" />
+    <ClCompile Include="Rendering\Texture\Texture.cpp">
+      <Filter>Rendering\Texture</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="App.h" />
+    <ClInclude Include="GameObject.h" />
+    <ClInclude Include="TickTimer.h" />
+    <ClInclude Include="Window.h" />
+    <ClInclude Include="Collision\Shapes\Circle.h" />
+    <ClInclude Include="Collision\CollisionGeometry.h" />
+    <ClInclude Include="Collision\Shapes\LineSegment.h" />
+    <ClInclude Include="Components\ComponentType.h" />
+    <ClInclude Include="Components\CollisionComponent.h" />
+    <ClInclude Include="Components\ITransformable.h" />
+    <ClInclude Include="Components\IPhysicsComponent.h" />
+    <ClInclude Include="Components\ProjectilePhysicsComponent.h" />
+    <ClInclude Include="Components\RegularTexturedPolygon.h" />
+    <ClInclude Include="Components\TexturedPolygon.h" />
+    <ClInclude Include="Components\IComponent.h" />
+    <ClInclude Include="Components\LineRenderComponent.h" />
+    <ClInclude Include="Components\IRenderComponent.h" />
+    <ClInclude Include="Collision\Shapes\Point.h" />
+    <ClInclude Include="Collision\Shapes\Polygon.h" />
+    <ClInclude Include="Math\Gyrotile.h" />
+    <ClInclude Include="Math\MobiusGyrometry.h" />
+    <ClInclude Include="Math\MobiusTransformation.h" />
+    <ClInclude Include="Rendering\RenderPrimitive.h" />
+    <ClInclude Include="Rendering\Renderer.h" />
+    <ClInclude Include="Systems\RenderSystem.h" />
+    <ClInclude Include="Rendering\shadertools.h" />
+    <ClInclude Include="Components\SpriteRenderComponent.h" />
+    <ClInclude Include="Rendering\Texture\TextureManager.h" />
+    <ClInclude Include="Math\IGyroVector.h" />
+    <ClInclude Include="Math\IVector.h" />
+    <ClInclude Include="Math\MobiusGyroline.h" />
+    <ClInclude Include="Math\MobiusGyrovector.h" />
+    <ClInclude Include="Rendering\Texture\Texture.h">
+      <Filter>Rendering\Texture</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resources\Image.png" />
+    <Image Include="Resources\rainbow.png" />
+    <Image Include="Resources\ship.png" />
+    <Image Include="Resources\sprite.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Rendering\Shaders\compute.glsl" />
+    <None Include="Rendering\Shaders\fragment.glsl" />
+    <None Include="Rendering\Shaders\vertex.glsl" />
+    <None Include="TODO.md" />
+  </ItemGroup>
+</Project>

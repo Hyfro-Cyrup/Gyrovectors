@@ -1,8 +1,6 @@
-﻿using System.Diagnostics;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 
 namespace Gyrovectors.Views.Components;
 
@@ -17,8 +15,8 @@ public class ZoomGrid : Grid
             new PropertyMetadata(1.1));
     public double ZoomFactor
     {
-        get => (double)GetValue(ZoomFactorProperty); 
-        set => SetValue(ZoomFactorProperty, value); 
+        get => (double)GetValue(ZoomFactorProperty);
+        set => SetValue(ZoomFactorProperty, value);
     }
 
     public ZoomGrid()
@@ -28,7 +26,7 @@ public class ZoomGrid : Grid
 
     private void OnMouseWheelZoom(object sender, MouseWheelEventArgs e)
     {
-        
+
         // Optional: Only zoom when Ctrl is held
         if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
         {

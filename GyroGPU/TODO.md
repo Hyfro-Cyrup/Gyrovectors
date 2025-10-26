@@ -1,0 +1,15 @@
+	- make width and height uniforms
+ 	- window rescaling
+	- fix collision
+	- gyroline edge case (line 31)
+	- RenderComponent (et al) constructors with position
+	- Hit testing, UI elements
+		- click and drag
+	- Encapsulate inputs
+	- Audio (copy from old) 
+		- need some kind of AudioComponent that listens to arbitrary events and publishes audio events?
+	- Separate Window and Viewport
+		- resize
+	- LineSegment rendering
+		- Also LineStrip, Point, Sketch, etc
+	- clamp the camera so you can't go too far

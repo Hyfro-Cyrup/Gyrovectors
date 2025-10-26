@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Numerics;
 
 namespace Gyrovectors.Models;
 
@@ -17,4 +12,4 @@ public interface IVector<V, S> :
     IEqualityOperators<V, V, bool>,
     IUnaryNegationOperators<V, V>
     where V : IVector<V, S>
-{}
+{ }

@@ -1,15 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
-using System.Transactions;
-using System.Windows.Media.Imaging;
-using System.Windows.Media.Media3D;
-using System.Windows.Shapes;
+﻿using System.Numerics;
 
 namespace Gyrovectors.Models;
 
@@ -147,7 +136,7 @@ public readonly struct MöbiusGyrovector : IGyroVector<MöbiusGyrovector, double
             (1 + 2.0 / S2 * uv + 1.0 / S4 * u2 * v2));
     }
 
-    public static MöbiusGyrovector operator -(MöbiusGyrovector value) 
+    public static MöbiusGyrovector operator -(MöbiusGyrovector value)
         => new MöbiusGyrovector(-value._value);
 
     public static MöbiusGyrovector operator -(MöbiusGyrovector left, MöbiusGyrovector right)

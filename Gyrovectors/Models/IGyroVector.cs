@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Gyrovectors.Models;
+﻿namespace Gyrovectors.Models;
 
 public interface IGyroVector<V, S> : IVector<V, S>
     where V : IGyroVector<V, S>

@@ -1,0 +1,232 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Components">
+      <UniqueIdentifier>{d771cd98f0295c490433fcfe19850073}</UniqueIdentifier>
+      </Filter>
+    <Filter Include="Components\Painted">
+      <UniqueIdentifier>{6ba869991f9a1719d1274c72b685c261}</UniqueIdentifier>
+      </Filter>
+    <Filter Include="Components\Textured">
+      <UniqueIdentifier>{6a9011decc4df83159e359ac0a354ca2}</UniqueIdentifier>
+      </Filter>
+    <Filter Include="Math">
+      <UniqueIdentifier>{73bf473318908db9ca05ff4428821880}</UniqueIdentifier>
+      </Filter>
+    <Filter Include="Rendering">
+      <UniqueIdentifier>{0781df6bd484a5ac2b72e13991f227f0}</UniqueIdentifier>
+      </Filter>
+    <Filter Include="Rendering\Shaders">
+      <UniqueIdentifier>{04327dffaa058d08be2adaedbfb491b4}</UniqueIdentifier>
+      </Filter>
+    <Filter Include="Rendering\Texture">
+      <UniqueIdentifier>{aa5cfb13cad71ad001f63219eb007fc0}</UniqueIdentifier>
+      </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{316bd427780e42c49cf9b0221d262827}</UniqueIdentifier>
+      </Filter>
+    <Filter Include="Shapes">
+      <UniqueIdentifier>{d7a5a57077b7ea5eae65ca4831c042cc}</UniqueIdentifier>
+      </Filter>
+    <Filter Include="Systems">
+      <UniqueIdentifier>{f71bc186850b1099ee72c95831c422eb}</UniqueIdentifier>
+      </Filter>
+    </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="stb_implementation.cpp" />
+    <ClCompile Include="TickTimer.cpp" />
+    <ClCompile Include="Window.cpp" />
+    <ClCompile Include="Components\CollisionComponent.cpp">
+      <Filter>Components</Filter>
+      </ClCompile>
+    <ClCompile Include="Components\IRenderComponent.cpp">
+      <Filter>Components</Filter>
+      </ClCompile>
+    <ClCompile Include="Components\PositionComponent.cpp">
+      <Filter>Components</Filter>
+      </ClCompile>
+    <ClCompile Include="Components\VelocityComponent.cpp">
+      <Filter>Components</Filter>
+      </ClCompile>
+    <ClCompile Include="Components\Painted\LineRenderComponent.cpp">
+      <Filter>Components\Painted</Filter>
+      </ClCompile>
+    <ClCompile Include="Components\Textured\RegularTexturedPolygon.cpp">
+      <Filter>Components\Textured</Filter>
+      </ClCompile>
+    <ClCompile Include="Components\Textured\TexturedPolygon.cpp">
+      <Filter>Components\Textured</Filter>
+      </ClCompile>
+    <ClCompile Include="Math\Gyrotile.cpp">
+      <Filter>Math</Filter>
+      </ClCompile>
+    <ClCompile Include="Math\MobiusGyrovector.cpp">
+      <Filter>Math</Filter>
+      </ClCompile>
+    <ClCompile Include="Rendering\Renderer.cpp">
+      <Filter>Rendering</Filter>
+      </ClCompile>
+    <ClCompile Include="Rendering\shadertools.cpp">
+      <Filter>Rendering</Filter>
+      </ClCompile>
+    <ClCompile Include="Rendering\Texture\Texture.cpp">
+      <Filter>Rendering\Texture</Filter>
+      </ClCompile>
+    <ClCompile Include="Rendering\Texture\TextureManager.cpp">
+      <Filter>Rendering\Texture</Filter>
+      </ClCompile>
+    <ClCompile Include="Shapes\Circle.cpp">
+      <Filter>Shapes</Filter>
+      </ClCompile>
+    <ClCompile Include="Shapes\LineSegment.cpp">
+      <Filter>Shapes</Filter>
+      </ClCompile>
+    <ClCompile Include="Shapes\Point.cpp">
+      <Filter>Shapes</Filter>
+      </ClCompile>
+    <ClCompile Include="Shapes\Polygon.cpp">
+      <Filter>Shapes</Filter>
+      </ClCompile>
+    <ClCompile Include="Systems\PhysicsSystem.cpp">
+      <Filter>Systems</Filter>
+      </ClCompile>
+    <ClCompile Include="Systems\RenderSystem.cpp">
+      <Filter>Systems</Filter>
+      </ClCompile>
+    </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="App.h" />
+    <ClInclude Include="GameObject.h" />
+    <ClInclude Include="TickTimer.h" />
+    <ClInclude Include="Window.h" />
+    <ClInclude Include="Components\CollisionComponent.h">
+      <Filter>Components</Filter>
+      </ClInclude>
+    <ClInclude Include="Components\Component.h">
+      <Filter>Components</Filter>
+      </ClInclude>
+    <ClInclude Include="Components\ComponentType.h">
+      <Filter>Components</Filter>
+      </ClInclude>
+    <ClInclude Include="Components\IComponent.h">
+      <Filter>Components</Filter>
+      </ClInclude>
+    <ClInclude Include="Components\IRenderComponent.h">
+      <Filter>Components</Filter>
+      </ClInclude>
+    <ClInclude Include="Components\PositionComponent.h">
+      <Filter>Components</Filter>
+      </ClInclude>
+    <ClInclude Include="Components\VelocityComponent.h">
+      <Filter>Components</Filter>
+      </ClInclude>
+    <ClInclude Include="Components\Painted\LineRenderComponent.h">
+      <Filter>Components\Painted</Filter>
+      </ClInclude>
+    <ClInclude Include="Components\Textured\RegularTexturedPolygon.h">
+      <Filter>Components\Textured</Filter>
+      </ClInclude>
+    <ClInclude Include="Components\Textured\SpriteRenderComponent.h">
+      <Filter>Components\Textured</Filter>
+      </ClInclude>
+    <ClInclude Include="Components\Textured\TexturedPolygon.h">
+      <Filter>Components\Textured</Filter>
+      </ClInclude>
+    <ClInclude Include="Math\Gyrotile.h">
+      <Filter>Math</Filter>
+      </ClInclude>
+    <ClInclude Include="Math\IGyroVector.h">
+      <Filter>Math</Filter>
+      </ClInclude>
+    <ClInclude Include="Math\IVector.h">
+      <Filter>Math</Filter>
+      </ClInclude>
+    <ClInclude Include="Math\MobiusGyroline.h">
+      <Filter>Math</Filter>
+      </ClInclude>
+    <ClInclude Include="Math\MobiusGyrometry.h">
+      <Filter>Math</Filter>
+      </ClInclude>
+    <ClInclude Include="Math\MobiusGyrovector.h">
+      <Filter>Math</Filter>
+      </ClInclude>
+    <ClInclude Include="Math\MobiusTransformation.h">
+      <Filter>Math</Filter>
+      </ClInclude>
+    <ClInclude Include="Rendering\Renderer.h">
+      <Filter>Rendering</Filter>
+      </ClInclude>
+    <ClInclude Include="Rendering\RenderPrimitive.h">
+      <Filter>Rendering</Filter>
+      </ClInclude>
+    <ClInclude Include="Rendering\shadertools.h">
+      <Filter>Rendering</Filter>
+      </ClInclude>
+    <ClInclude Include="Rendering\Texture\Texture.h">
+      <Filter>Rendering\Texture</Filter>
+      </ClInclude>
+    <ClInclude Include="Rendering\Texture\TextureManager.h">
+      <Filter>Rendering\Texture</Filter>
+      </ClInclude>
+    <ClInclude Include="Shapes\Circle.h">
+      <Filter>Shapes</Filter>
+      </ClInclude>
+    <ClInclude Include="Shapes\IGeometry.h">
+      <Filter>Shapes</Filter>
+      </ClInclude>
+    <ClInclude Include="Shapes\LineSegment.h">
+      <Filter>Shapes</Filter>
+      </ClInclude>
+    <ClInclude Include="Shapes\Point.h">
+      <Filter>Shapes</Filter>
+      </ClInclude>
+    <ClInclude Include="Shapes\Polygon.h">
+      <Filter>Shapes</Filter>
+      </ClInclude>
+    <ClInclude Include="Systems\CollisionSystem.h">
+      <Filter>Systems</Filter>
+      </ClInclude>
+    <ClInclude Include="Systems\PhysicsSystem.h">
+      <Filter>Systems</Filter>
+      </ClInclude>
+    <ClInclude Include="Systems\RenderSystem.h">
+      <Filter>Systems</Filter>
+      </ClInclude>
+    </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resources\betrayal.png">
+      <Filter>Resources</Filter>
+      </Image>
+    <Image Include="Resources\gradient.png">
+      <Filter>Resources</Filter>
+      </Image>
+    <Image Include="Resources\Image.png">
+      <Filter>Resources</Filter>
+      </Image>
+    <Image Include="Resources\rainbow.png">
+      <Filter>Resources</Filter>
+      </Image>
+    <Image Include="Resources\ship.png">
+      <Filter>Resources</Filter>
+      </Image>
+    <Image Include="Resources\sprite.png">
+      <Filter>Resources</Filter>
+      </Image>
+    </ItemGroup>
+  <ItemGroup>
+    <None Include="TODO.md" />
+    <None Include="Rendering\Shaders\compute.glsl">
+      <Filter>Rendering\Shaders</Filter>
+      </None>
+    <None Include="Rendering\Shaders\fragment.glsl">
+      <Filter>Rendering\Shaders</Filter>
+      </None>
+    <None Include="Rendering\Shaders\vertex.glsl">
+      <Filter>Rendering\Shaders</Filter>
+      </None>
+    <None Include="Systems\README.md">
+      <Filter>Systems</Filter>
+      </None>
+    </ItemGroup>
+  </Project>

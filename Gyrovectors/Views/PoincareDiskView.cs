@@ -1,18 +1,10 @@
-﻿using CommunityToolkit.Mvvm.Input;
-using Gyrovectors.Models;
+﻿using Gyrovectors.Models;
 using Gyrovectors.ViewModels;
 using Gyrovectors.Views.Components;
-using System;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.Numerics;
-using System.Security.Permissions;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Gyrovectors.Views;
 public class PoincareDiskView : CircularCanvas
@@ -77,7 +69,7 @@ public class PoincareDiskView : CircularCanvas
     private readonly DrawingGroup backingStore = new(); // Lets us draw without triggering layout updates and such
     protected override void OnRender(DrawingContext dc)
     {
-        
+
         base.OnRender(dc);
 
         dc.DrawDrawing(backingStore);
@@ -115,7 +107,7 @@ public class PoincareDiskView : CircularCanvas
         for (int i = 0; i < 6; i++)
         {
             DrawGyroSegment(Grid.Lines[i], dc, Red_Pen);
-            DrawGyrovector(Grid.Lines[i].a, dc, Pens[i +1], 2);
+            DrawGyrovector(Grid.Lines[i].a, dc, Pens[i + 1], 2);
         }
         DrawGyrovector(MöbiusGyrovector.Zero, dc, Cyan_Pen);
 
@@ -126,7 +118,7 @@ public class PoincareDiskView : CircularCanvas
     #region Convert Coordinates
     private Point World2Screen(double x, double y) // convert points
     {
-        return new(Center.X + Radius*x,  Center.Y - Radius*y);
+        return new(Center.X + Radius * x, Center.Y - Radius * y);
     }
     private Point World2Screen(Complex z) => World2Screen(z.Real, z.Imaginary);
     private Point World2Screen(MöbiusGyrovector a) => World2Screen(a.x, a.y);
@@ -152,7 +144,7 @@ public class PoincareDiskView : CircularCanvas
         double center_angle = Math.Atan2(line.center.Imaginary, line.center.Real);
 
         DrawEuclideanArc(new(Math.Cos(center_angle + angle_offset), Math.Sin(center_angle + angle_offset)), new(Math.Cos(center_angle - angle_offset), Math.Sin(center_angle - angle_offset)), line.radius, dc, pen);
-        
+
     }
 
     private void DrawGyroSegment(MöbiusGyroline line, DrawingContext dc, Pen pen)
@@ -166,7 +158,7 @@ public class PoincareDiskView : CircularCanvas
         dc.DrawGeometry(null, pen, geo);
     }
 
-    private void DrawGyrovector(MöbiusGyrovector a, DrawingContext dc, Pen pen, int weight=1)
+    private void DrawGyrovector(MöbiusGyrovector a, DrawingContext dc, Pen pen, int weight = 1)
     {
         dc.DrawEllipse(pen.Brush, pen, World2Screen(a), weight, weight);
     }
